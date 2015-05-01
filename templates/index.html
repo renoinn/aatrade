@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="ja" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<title>日替わり取引所</title>
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<!-- /bootstrap -->
+	<link href="/aatrade/style.css" rel="stylesheet" type="text/css" media="screen, tv" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/aatrade/">日替わり取引所</a>
+        </div>
+      </div>
+    </nav>
+	<div id="control" >
+		<div class="container">
+		<form id="post" method="POST" action="/aatrade/post_merchandise.php">
+			<table>
+				<tr>
+					<th>種類</th>
+					<th>キャラ</th>
+					<th>アイテム</th>
+					<th>個数</th>
+					<th>単価</th>
+					<th>編集用コード</th>
+				</tr>
+				<tr>
+					<td>
+						<select name="type">
+							<option value="sell">販売</option>
+							<option value="buy">買取</option>
+						</select>
+					</td>
+					<td><input type="text" name="character" /></td>
+					<td><input type="text" name="item" /></td>
+					<td><input type="text" name="num" /></td>
+					<td><input size="5em" type="text" name="cost_g" />金&nbsp;<input size="5em" type="text" name="cost_s" />銀&nbsp;<input size="5em" type="text" name="cost_c" />銅</td>
+					<td><input type="text" name="delete_code" /></td>
+					<td rowspan="4"><input type="submit" name="submit" value="登録"/></td>
+				</tr>
+				<tr><th colspan="6">コメント</th></tr>
+				<tr><td colspan="6">
+						<textarea name="comment" style="width:100%;"></textarea>
+				</td></tr>
+			</table>
+		</form>
+		</div>
+	</div>
+	<div id="main" class="container theme-showcase" role="main">
+		<?php if(0 < count($sell_data)): ?>
+		<div id="sell_merchandise">
+			<h2>販売</h2>
+			<table>
+				<tr>
+					<th>キャラ</th>
+					<th>アイテム</th>
+					<th>個数</th>
+					<th>単価</th>
+					<th>更新日</th>
+					<th>編集/削除</th>
+				</tr>
+				<?php foreach($sell_data as $item): ?>
+				<tr>
+					<td><?php echo $item['character']; ?></td>
+					<td><a href="/aatrade/bid.php?mid=<?php echo $item['mid']; ?>"><?php echo $item['item']; ?></a></td>
+					<td><?php echo $item['num']; ?></td>
+					<td><?php echo Util::cost2Gsc($item['cost'], true); ?></td>
+					<td><?php echo $item['updated']; ?></td>
+					<td><a href="/aatrade/edit.php?mid=<?php echo $item['mid']; ?>">編集/削除</a></td>
+				</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php if(0 < count($buy_data)): ?>
+		<div id="buy_merchandise">
+			<h2>買取</h2>
+			<table>
+				<tr>
+					<th>キャラ</th>
+					<th>アイテム</th>
+					<th>個数</th>
+					<th>単価</th>
+					<th>更新日</th>
+					<th>編集/削除</th>
+				</tr>
+				<?php foreach($buy_data as $item): ?>
+				<tr>
+					<td><?php echo $item['character']; ?></td>
+					<td><a href="/aatrade/bid.php?mid=<?php echo $item['mid']; ?>"><?php echo $item['item']; ?></a></td>
+					<td><?php echo $item['num']; ?></td>
+					<td><?php echo Util::cost2Gsc($item['cost'], true); ?></td>
+					<td><?php echo $item['updated']; ?></td>
+					<td><a href="/aatrade/edit.php?mid=<?php echo $item['mid']; ?>">編集/削除</a></td>
+				</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+		<?php endif; ?>
+	</div>
+</body>
+</html>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="/aamap/controller.js"></script>
+<script src="/aamap/view.js"></script>
+

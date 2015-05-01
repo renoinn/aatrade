@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="ja" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<title>日替わり取引所</title>
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<!-- /bootstrap -->
+	<link href="/aatrade/style.css" rel="stylesheet" type="text/css" media="screen, tv" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/aatrade/">日替わり取引所</a>
+        </div>
+      </div>
+    </nav>
+	<div id="control" >
+		<div class="container">
+		<form id="post" method="POST" action="/aatrade/post_bid.php">
+			<input type="hidden" name="mid" value="<?php echo $merchandise['mid']; ?>" />
+			<input type="hidden" name="merch_num" value="<?php echo $merchandise['num']; ?>" />
+			<table>
+				<tr>
+					<th>キャラ</th>
+					<th>個数</th>
+					<th>削除用コード</th>
+				</tr>
+				<tr>
+					<td><input type="text" name="character" /></td>
+					<td><input type="text" name="num" /></td>
+					<td><input type="text" name="delete_code" /></td>
+					<td rowspan="4"><input type="submit" name="submit" value="入札"/></td>
+				</tr>
+				<tr><th colspan="3">コメント</th></tr>
+				<tr><td colspan="3">
+						<textarea name="comment" style="width:100%;"></textarea>
+				</td></tr>
+			</table>
+		</form>
+		</div>
+	</div>
+	<div id="main" class="container theme-showcase" role="main">
+		<div id="merchandise">
+			<h2>取り引き</h2>
+			<table>
+				<tr>
+					<th>キャラ</th>
+					<th>アイテム</th>
+					<th>個数</th>
+					<th>単価</th>
+					<th>更新日</th>
+				</tr>
+				<tr>
+					<td><?php echo $merchandise['character']; ?></td>
+					<td><a href="/aatrade/bid.php?mid=<?php echo $merchandise['mid']; ?>"><?php echo $merchandise['item']; ?></a></td>
+					<td><?php echo $merchandise['num']; ?></td>
+					<td><?php echo Util::cost2Gsc($merchandise['cost'], true); ?></td>
+					<td><?php echo $merchandise['updated']; ?></td>
+				</tr>
+			</table>
+		</div>
+		<?php if(0 < count($bid_data)): ?>
+		<div id="bid_history">
+			<h2>入札履歴</h2>
+			<table>
+				<tr>
+					<th>ステータス</th>
+					<th>キャラ名</th>
+					<th>個数</th>
+					<th>費用</th>
+					<th>完了/取消</th>
+				</tr>
+				<?php foreach($bid_data as $item): ?>
+				<tr>
+					<?php if ($item['closed'] != 0): ?><td class="closed"><?php else: ?><td><?php endif; ?><?php echo $item['closed'] == 0 ? '未完了' : '完了'; ?></td>
+					<?php if ($item['closed'] != 0): ?><td class="closed"><?php else: ?><td><?php endif; ?><?php echo $item['character']; ?></td>
+					<?php if ($item['closed'] != 0): ?><td class="closed"><?php else: ?><td><?php endif; ?><?php echo $item['num']; ?></td>
+					<?php if ($item['closed'] != 0): ?><td class="closed"><?php else: ?><td><?php endif; ?><?php echo Util::cost2Gsc($merchandise['cost'] * $item['num'], true); ?></td>
+					<?php if ($item['closed'] != 0): ?><td class="closed"><?php else: ?><td><?php endif; ?>
+						<form method="POST" action="/aatrade/update_bid.php">
+							<input type="hidden" name="bid" value="<?php echo $item['bid']; ?>" />
+							<input type="hidden" name="mid" value="<?php echo $item['mid']; ?>" />
+							<?php if ($item['closed'] == 0): ?><input type="submit" name="closed" value="完了" />&nbsp;&nbsp;/&nbsp;&nbsp;<?php endif; ?><input type="submit" name="delete" value="取消" />
+						</form>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+		<?php endif; ?>
+		<p><a href="/aatrade/">戻る</a></p>
+	</div>
+</body>
+</html>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="/aamap/controller.js"></script>
+<script src="/aamap/view.js"></script>
+

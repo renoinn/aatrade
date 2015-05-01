@@ -1,0 +1,32 @@
+body {
+	padding-top: 50px;
+}
+#control {
+	padding-top: 10px;
+	margin-bottom: 20px;
+	background-color: #eee;
+}
+#control p.info {
+	color: #777;
+	font-size: 11px;
+}
+
+#main {
+}
+#main table th {
+	color: #fff;
+	background-color: #222;
+}
+#main table th,
+#main table td {
+	padding: 5px 10px;
+	border: 1px solid #bbb;
+}
+#main table td.closed {
+	background-color: #eee;
+	color: #aaa;
+}
+
+#bid_history {
+	margin-bottom: 10px;
+}
