@@ -44,7 +44,7 @@
 					<td><input type="text" name="num" /></td>
 					<td><input size="5em" type="text" name="cost_g" />金&nbsp;<input size="5em" type="text" name="cost_s" />銀&nbsp;<input size="5em" type="text" name="cost_c" />銅</td>
 					<td><input type="text" name="delete_code" /></td>
-					<td rowspan="4"><input type="submit" name="submit" value="登録"/></td>
+					<td rowspan="4"><input class="submit" type="submit" name="submit" value="登録"/></td>
 				</tr>
 				<tr><th colspan="6">コメント</th></tr>
 				<tr><td colspan="6">
@@ -55,6 +55,13 @@
 		</div>
 	</div>
 	<div id="main" class="container theme-showcase" role="main">
+		<?php if (isset($error_code)): ?>
+		<div id="message">
+		  <div id="error" class="alert alert-danger sr-only" role="alert">
+			失敗したぞハゲ！
+		  </div>
+		</div>
+		<?php endif; ?>
 		<?php if(0 < count($sell_data)): ?>
 		<div id="sell_merchandise">
 			<h2>販売</h2>
@@ -65,16 +72,14 @@
 					<th>個数</th>
 					<th>単価</th>
 					<th>更新日</th>
-					<th>編集/削除</th>
 				</tr>
 				<?php foreach($sell_data as $item): ?>
 				<tr>
 					<td><?php echo $item['character']; ?></td>
 					<td><a href="/aatrade/bid.php?mid=<?php echo $item['mid']; ?>"><?php echo $item['item']; ?></a></td>
 					<td><?php echo $item['num']; ?></td>
-					<td><?php echo Util::cost2Gsc($item['cost'], true); ?></td>
+					<td><?php echo Util::cost_2_gsc($item['cost'], true); ?></td>
 					<td><?php echo $item['updated']; ?></td>
-					<td><a href="/aatrade/edit.php?mid=<?php echo $item['mid']; ?>">編集/削除</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</table>
@@ -90,16 +95,14 @@
 					<th>個数</th>
 					<th>単価</th>
 					<th>更新日</th>
-					<th>編集/削除</th>
 				</tr>
 				<?php foreach($buy_data as $item): ?>
 				<tr>
 					<td><?php echo $item['character']; ?></td>
 					<td><a href="/aatrade/bid.php?mid=<?php echo $item['mid']; ?>"><?php echo $item['item']; ?></a></td>
 					<td><?php echo $item['num']; ?></td>
-					<td><?php echo Util::cost2Gsc($item['cost'], true); ?></td>
+					<td><?php echo Util::cost_2_gsc($item['cost'], true); ?></td>
 					<td><?php echo $item['updated']; ?></td>
-					<td><a href="/aatrade/edit.php?mid=<?php echo $item['mid']; ?>">編集/削除</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</table>

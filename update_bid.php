@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__).'/library/validate.php';
+require_once dirname(__FILE__).'/library/error.php';
 require_once dirname(__FILE__).'/library/util.php';
 require_once dirname(__FILE__).'/library/model.php';
 
@@ -14,12 +16,20 @@ $params = array();
 foreach ($UPDATE_BID_PARAMS as $param) {
 	if(isset($_POST[$param]) && $_POST[$param] != '') {
 		$params[$param] = $_POST[$param];
+	} else {
+		$params[$param] = '';
 	}
 }
 
+if (!Validate::check($params)) {
+	Error::do_error_response('/aatrade/bid.php?mid='.$params['mid']);
+	exit;
+}
+
+$result = false;
 $merchandise = Model::get_merchandise(array('mid' => $params['mid']));
 $bid = Model::get_bid(array('bid' => $params['bid']));
-if (isset($params['close']) && $params['close'] != '') {
+if (isset($params['closed']) && $params['closed'] != '') {
 	$stock = $merchandise[0]['num'] - $bid[0]['num'];
 
 	$values = array(
@@ -46,13 +56,7 @@ if (isset($params['close']) && $params['close'] != '') {
 
 if (!$result) {
 	error_log('faild add.');
-	doErrorResponse();
+	Error::do_error_response('/aatrade/bid.php?mid='.$params['mid']);
 }
 header("Content-Type: application/json; charset=utf-8");
 header('Location: /aatrade/bid.php?mid='.$params['mid'].'&success='.$result);
-
-function doErrorResponse() {
-	header("HTTP/1.1 500 Internal Server Error");
-	header('Location: /aatrade/bid.php?mid='.$params['mid']);
-	exit;
-}

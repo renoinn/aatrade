@@ -11,6 +11,9 @@ body {
 	font-size: 11px;
 }
 
+table td .submit {
+	margin-left: 10px;
+}
 #main {
 }
 #main table th {

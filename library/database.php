@@ -70,7 +70,6 @@ class Database {
 				$result = $sth->fetchAll(\PDO::FETCH_ASSOC);
 				break;
 			case 'INSERT':
-			case 'UPDATE':
 			case 'CREATE':
 				/*
 				return array(
@@ -79,6 +78,9 @@ class Database {
 				);
 				*/
 				return $this->_connection->lastInsertId();
+				break;
+			case 'UPDATE':
+				return $sth->rowCount();
 				break;
 			default:
 				break;

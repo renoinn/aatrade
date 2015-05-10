@@ -32,17 +32,17 @@ class Model {
 		}
 		$sql .= ' WHERE mid='.$mid;
 
-		$id = '';
+		$res = false;
 		$db->start_transaction();
 		try {
-			$id = $db->execute($sql, $values);
+			$res = $db->execute($sql, $values);
 			$db->commit_transaction();
 		} catch (DatabaseException $e) {
 			error_log($e);
 			$db->rollback_transaction();
 			return false;
 		}
-		return $id;
+		return $res;
 	}
 
 	public static function get_merchandise($values, $sort = 'DESC') {
