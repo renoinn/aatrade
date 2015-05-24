@@ -4,7 +4,6 @@ class Util {
 
 	public static function gsc_2_cost($c, $s = 0, $g = 0) {
 		$cost = ($g * 10000) + ($s * 100) + $c;
-		error_log('['.__METHOD__.'] cost='.$cost.' / g='.$g.' s='.$s.' c='.$c);
 		return $cost;
 	}
 
@@ -21,7 +20,6 @@ class Util {
 		if (0 < $cost) {
 			$c = $cost - $s * 100;
 		}
-		error_log('['.__METHOD__.'] cost='.$cost.' / g='.$g.' s='.$s.' c='.$c);
 
 		if ($isString) {
 			$str = '';
